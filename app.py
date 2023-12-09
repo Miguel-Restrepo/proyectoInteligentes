@@ -1,5 +1,12 @@
 from flask import Flask, request, jsonify
 import pandas as pd
+from pymongo import MongoClient
+
+# Configuración de la conexión a la base de datos MongoDB
+client = MongoClient("mongodb+srv://Miguel12195:uCBdaWo23Vln0gk8@cluster0.pa0yg19.mongodb.net/")
+db = client['inteligentes']
+datasetCollection = db['dataset']
+trainCollection = db['train']
 
 app = Flask(__name__)
 
