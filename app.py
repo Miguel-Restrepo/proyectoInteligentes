@@ -25,10 +25,30 @@ if __name__ == '__main__':
 @app.route('/load', methods=['POST'])
 def load():
     if request.method == 'POST':
-        data = request.json
+        if 'file' not in request.files:
+            return jsonify({'error': 'No se proporcionó ningún archivo'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'Nombre de archivo no válido'}), 400
+
+        if file:
+            try:
+                # Leer el archivo Excel usando pandas
+                df = pd.read_excel(file)
+
+                # Convertir los datos a formato JSON y almacenarlos en MongoDB
+                data_as_json = df.to_dict(orient='records')
+                datasetCollection.insert_many(data_as_json)
+
+                return jsonify({'message': 'Datos cargados exitosamente a MongoDB'})
+            except Exception as e:
+                return jsonify({'error': f'Error al cargar el archivo: {str(e)}'}), 500
+
+
         return jsonify({'message': 'Solicitud POST recibida correctamente', 'data': data}), 200
     else:
-        # Si la solicitud no es POST, devuelve un error
+         # Si la solicitud no es POST, devuelve un error
         return jsonify({'error': 'Se espera una solicitud POST'}), 400
 
 
