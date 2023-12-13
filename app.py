@@ -68,7 +68,7 @@ def load():
                 return jsonify({'error': f'Error al cargar el archivo: {str(e)}'}), 500
 
 
-        return jsonify({'message': 'Solicitud POST recibida correctamente', 'data': data}), 200
+        return jsonify({'message': 'Solicitud POST recibida correctamente'}), 200
     else:
          # Si la solicitud no es POST, devuelve un error
         return jsonify({'error': 'Se espera una solicitud POST'}), 400
